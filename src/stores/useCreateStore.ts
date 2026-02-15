@@ -1,44 +1,47 @@
 import { create } from "zustand";
-import { AudienceDensity, AudienceMood, EventType } from "@/types/stage";
+import { AudienceDensity, EventType, ImagePerspective } from "@/types/stage";
 
 export const MAX_UPLOADED_IMAGES = 3;
-
-export type UploadedImage = {
-  file: File;
-  preview: string;
-};
 
 interface CreateStore {
   // Wizard step
   currentStep: 1 | 2 | 3;
 
   // Step 1: Environment
-  uploadedImages: UploadedImage[];
+  uploadedImages: {
+    file: File;
+    preview: string;
+  }[];
   imageUrl: string | null;
 
   // Step 2: Audience Density
   audienceDensity: AudienceDensity;
 
-  // Step 3: Event + Mood
+  // Step 3: Event + Context
   eventType: EventType;
-  audienceMood: AudienceMood;
+  imagePerspective: ImagePerspective;
   customContext: string;
 
   // Actions
   setStep: (step: 1 | 2 | 3) => void;
   nextStep: () => void;
   prevStep: () => void;
-  setUploadedImages: (images: UploadedImage[]) => void;
-  addUploadedImages: (images: UploadedImage[]) => void;
+  setUploadedImages: (images: { file: File; preview: string }[]) => void;
+  addUploadedImages: (images: { file: File; preview: string }[]) => void;
   removeUploadedImage: (index: number) => void;
   clearUploadedImages: () => void;
   setImageUrl: (url: string) => void;
   setAudienceDensity: (density: AudienceDensity) => void;
   setEventType: (eventType: EventType) => void;
-  setAudienceMood: (mood: AudienceMood) => void;
+  setImagePerspective: (perspective: ImagePerspective) => void;
   setCustomContext: (context: string) => void;
   reset: () => void;
 }
+
+export type UploadedImage = {
+  file: File;
+  preview: string;
+};
 
 export const useCreateStore = create<CreateStore>((set) => ({
   currentStep: 1,
@@ -46,7 +49,7 @@ export const useCreateStore = create<CreateStore>((set) => ({
   imageUrl: null,
   audienceDensity: 80,
   eventType: "presentation",
-  audienceMood: "auto",
+  imagePerspective: "stage_to_audience",
   customContext: "",
 
   setStep: (step) => set({ currentStep: step }),
@@ -77,7 +80,7 @@ export const useCreateStore = create<CreateStore>((set) => ({
   setImageUrl: (url) => set({ imageUrl: url }),
   setAudienceDensity: (density) => set({ audienceDensity: density }),
   setEventType: (eventType) => set({ eventType }),
-  setAudienceMood: (mood) => set({ audienceMood: mood }),
+  setImagePerspective: (perspective) => set({ imagePerspective: perspective }),
   setCustomContext: (context) => set({ customContext: context }),
   reset: () =>
     set({
@@ -86,7 +89,7 @@ export const useCreateStore = create<CreateStore>((set) => ({
       imageUrl: null,
       audienceDensity: 80,
       eventType: "presentation",
-      audienceMood: "auto",
+      imagePerspective: "stage_to_audience",
       customContext: "",
     }),
 }));

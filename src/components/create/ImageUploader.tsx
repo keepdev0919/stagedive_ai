@@ -173,9 +173,6 @@ export default function ImageUploader() {
         <h4 className="text-lg font-bold text-white">
           {t("create.environment.uploadTitle")}
         </h4>
-        <p className="text-slate-500 text-sm mt-2 max-w-xs">
-          {t("create.environment.uploadHint")}
-        </p>
         <p className="text-slate-500 text-xs mt-2">
           {t("create.environment.uploadLimit", { count: MAX_UPLOADED_IMAGES })}
         </p>

@@ -106,12 +106,10 @@ const translations = {
 
     "create.step.background": "배경",
     "create.step.audience": "관중",
-    "create.step.persona": "이벤트/무드",
+    "create.step.persona": "상황 설정",
 
-    "create.environment.title": "환경 설정",
+    "create.environment.title": "무대 배경",
     "create.environment.uploadTitle": "무대 배경 이미지 업로드",
-    "create.environment.uploadHint":
-      "고화질 가로형 또는 360° 파노라마 이미지를 드래그 앤 드롭하세요 (JPG, PNG, WEBP - 최대 50MB)",
     "create.environment.uploadLimit": "최대 {count}장까지 업로드할 수 있어요.",
     "create.environment.browseFiles": "파일 선택",
     "create.environment.addAnother": "사진 추가 ({current}/{max})",
@@ -133,6 +131,12 @@ const translations = {
     "create.customContext.label": "기타 상황 직접 입력",
     "create.customContext.placeholder":
       "예: 결혼식 사회처럼 조용하고 단정한 톤으로, 관객은 잔잔하게 반응했으면 좋아요",
+    "create.imagePerspective.sectionTitle": "이미지 구도",
+    "create.imagePerspective.stageToAudience.title": "무대에서 촬영",
+    "create.imagePerspective.stageToAudience.description": "무대에서 관객석을 보는 사진입니다.",
+    "create.imagePerspective.audienceToStage.title": "관객석/기타 구도",
+    "create.imagePerspective.audienceToStage.description":
+      "관객석에서 또는 방향이 다른 사진입니다. 먼저 무대 POV로 보정해요.",
     "create.eventType.presentation.title": "발표",
     "create.eventType.presentation.description": "일반 발표, 데모, 브리핑에 맞는 기본 톤입니다.",
     "create.eventType.performance.title": "공연",
@@ -149,16 +153,7 @@ const translations = {
       "행사 개회, 시상식, 공개 발표에서 활용하기 좋은 분위기입니다.",
     "create.eventType.other.title": "기타",
     "create.eventType.other.description": "목록에 없는 무대 상황을 직접 입력해 주세요.",
-    "create.audienceMood.sectionTitle": "관객 분위기",
-    "create.audienceMood.auto": "자동",
-    "create.audienceMood.calm_attention": "차분한 집중",
-    "create.audienceMood.warm_support": "따뜻한 응원",
-    "create.audienceMood.formal_event": "포멀 톤",
-    "create.audienceMood.high_energy": "고에너지",
-
-    "create.stepper.title.background": "무대 배경",
-    "create.stepper.title.audience": "관객 설정",
-    "create.stepper.title.persona": "이벤트/무드",
+    
 
     "create.action.back": "스테이지 목록으로",
     "create.action.saveDraft": "임시 저장",
@@ -271,12 +266,10 @@ const translations = {
 
     "create.step.background": "Background",
     "create.step.audience": "Audience",
-    "create.step.persona": "Event/Mood",
+    "create.step.persona": "Event Context",
 
     "create.environment.title": "Environment Setup",
     "create.environment.uploadTitle": "Upload Stage Background Image",
-    "create.environment.uploadHint":
-      "Drag and drop high-resolution landscape or 360° panorama images (JPG, PNG, WEBP - max 50MB)",
     "create.environment.uploadLimit": "You can upload up to {count} images.",
     "create.environment.browseFiles": "Browse Files",
     "create.environment.addAnother": "Add another photo ({current}/{max})",
@@ -298,6 +291,13 @@ const translations = {
     "create.customContext.label": "Custom scenario details",
     "create.customContext.placeholder":
       "e.g., Keep applause minimal, audience is quietly attentive for a solemn event.",
+    "create.imagePerspective.sectionTitle": "Image Perspective",
+    "create.imagePerspective.stageToAudience.title": "Stage side",
+    "create.imagePerspective.stageToAudience.description":
+      "Photo already from stage facing the audience.",
+    "create.imagePerspective.audienceToStage.title": "Audience side / other",
+    "create.imagePerspective.audienceToStage.description":
+      "Photo from audience side or direction is unclear; reframe to stage POV first.",
     "create.eventType.presentation.title": "Presentation",
     "create.eventType.presentation.description":
       "Default setup for talks, demos, and briefings.",
@@ -316,16 +316,7 @@ const translations = {
     "create.eventType.other.title": "Other",
     "create.eventType.other.description":
       "Use this when your scenario is not listed above.",
-    "create.audienceMood.sectionTitle": "Audience Mood",
-    "create.audienceMood.auto": "Auto",
-    "create.audienceMood.calm_attention": "Calm Focus",
-    "create.audienceMood.warm_support": "Supportive",
-    "create.audienceMood.formal_event": "Formal",
-    "create.audienceMood.high_energy": "High Energy",
-
-    "create.stepper.title.background": "Background",
-    "create.stepper.title.audience": "Audience",
-    "create.stepper.title.persona": "Event/Mood",
+    
 
     "create.action.back": "Back to Stages",
     "create.action.saveDraft": "Save as Draft",

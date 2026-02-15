@@ -12,7 +12,7 @@ export default function ActionBar() {
     uploadedImages,
     audienceDensity,
     eventType,
-    audienceMood,
+    imagePerspective,
     customContext,
     reset,
   } = useCreateStore();
@@ -124,7 +124,7 @@ export default function ActionBar() {
           source_image_urls: uploadedImageUrls,
           audience_density: audienceDensity,
           event_type: eventType,
-          audience_mood: audienceMood,
+          image_perspective: imagePerspective,
           custom_context: customContext,
         }),
       });
@@ -149,8 +149,8 @@ export default function ActionBar() {
           sourceImageUrls: uploadedImageUrls,
           sourceImageUrl: uploadedImageUrls[0],
           audienceDensity,
+          imagePerspective,
           eventType,
-          audienceMood,
           customContext,
         }),
       });

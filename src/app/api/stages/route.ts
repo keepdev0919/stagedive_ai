@@ -46,7 +46,7 @@ export async function POST(request: Request) {
           .slice(0, 3)
       : [];
     const eventType = body.event_type || body.eventType || "presentation";
-    const audienceMood = body.audience_mood || body.audienceMood || "auto";
+    const imagePerspective = body.image_perspective || body.imagePerspective;
     const customContext = body.custom_context || body.customContext || "";
     const payload = {
       user_id: user.id,
@@ -57,7 +57,7 @@ export async function POST(request: Request) {
       source_image_url: body.source_image_url || sourceImageUrls[0] || null,
       audience_density: body.audience_density || 80,
       event_type: eventType,
-      audience_mood: audienceMood,
+      image_perspective: imagePerspective || null,
       custom_context: customContext || null,
       persona: body.persona || null,
       status: "draft",
@@ -101,18 +101,18 @@ export async function POST(request: Request) {
       error = fallbackResult.error;
     }
 
-    // Backward compatibility if event_type / audience_mood columns are not provisioned yet.
+    // Backward compatibility if optional event_type/image_perspective/custom_context columns are not provisioned yet.
     if (
       error &&
       (error.message.includes("event_type") ||
-        error.message.includes("audience_mood") ||
+        error.message.includes("image_perspective") ||
         error.message.includes("custom_context") ||
         error.message.includes("Could not find the"))
     ) {
       const legacyPayload = {
         ...payload,
         event_type: undefined,
-        audience_mood: undefined,
+        image_perspective: undefined,
         custom_context: undefined,
       };
 

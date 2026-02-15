@@ -16,12 +16,9 @@ export type EventType =
   | "event"
   | "other";
 
-export type AudienceMood =
-  | "auto"
-  | "calm_attention"
-  | "warm_support"
-  | "formal_event"
-  | "high_energy";
+export type ImagePerspective =
+  | "stage_to_audience"
+  | "audience_to_stage";
 
 // Keep Persona for backward compatibility with existing records
 export type Persona = "presenter" | "musician";
@@ -52,7 +49,7 @@ export interface Stage {
   video_url: string | null;
   audience_density: AudienceDensity;
   event_type: EventType;
-  audience_mood: AudienceMood;
+  image_perspective?: ImagePerspective;
   custom_context?: string | null;
   persona?: Persona;
   status: StageStatus;
