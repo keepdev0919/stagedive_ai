@@ -1,8 +1,19 @@
 import { StagePreset } from "@/types/stage";
 import StageCard from "./StageCard";
 
+export type StageListItem = {
+  id: string;
+  name: string;
+  category: StagePreset["category"];
+  capacity: string;
+  feature: string;
+  featureIcon?: string;
+  imageUrl: string;
+  isPreset?: boolean;
+};
+
 interface StageGridProps {
-  stages: StagePreset[];
+  stages: StageListItem[];
 }
 
 export default function StageGrid({ stages }: StageGridProps) {

@@ -1,40 +1,53 @@
 import { create } from "zustand";
-import { AudienceDensity, Persona } from "@/types/stage";
+import { AudienceDensity, AudienceMood, EventType } from "@/types/stage";
+
+export const MAX_UPLOADED_IMAGES = 3;
+
+export type UploadedImage = {
+  file: File;
+  preview: string;
+};
 
 interface CreateStore {
   // Wizard step
   currentStep: 1 | 2 | 3;
 
   // Step 1: Environment
-  uploadedFile: File | null;
-  uploadedPreview: string | null;
+  uploadedImages: UploadedImage[];
   imageUrl: string | null;
 
   // Step 2: Audience Density
   audienceDensity: AudienceDensity;
 
-  // Step 3: Persona
-  persona: Persona;
+  // Step 3: Event + Mood
+  eventType: EventType;
+  audienceMood: AudienceMood;
+  customContext: string;
 
   // Actions
   setStep: (step: 1 | 2 | 3) => void;
   nextStep: () => void;
   prevStep: () => void;
-  setUploadedFile: (file: File, preview: string) => void;
-  clearUploadedFile: () => void;
+  setUploadedImages: (images: UploadedImage[]) => void;
+  addUploadedImages: (images: UploadedImage[]) => void;
+  removeUploadedImage: (index: number) => void;
+  clearUploadedImages: () => void;
   setImageUrl: (url: string) => void;
   setAudienceDensity: (density: AudienceDensity) => void;
-  setPersona: (persona: Persona) => void;
+  setEventType: (eventType: EventType) => void;
+  setAudienceMood: (mood: AudienceMood) => void;
+  setCustomContext: (context: string) => void;
   reset: () => void;
 }
 
 export const useCreateStore = create<CreateStore>((set) => ({
   currentStep: 1,
-  uploadedFile: null,
-  uploadedPreview: null,
+  uploadedImages: [],
   imageUrl: null,
   audienceDensity: 80,
-  persona: "presenter",
+  eventType: "presentation",
+  audienceMood: "auto",
+  customContext: "",
 
   setStep: (step) => set({ currentStep: step }),
   nextStep: () =>
@@ -45,20 +58,35 @@ export const useCreateStore = create<CreateStore>((set) => ({
     set((state) => ({
       currentStep: Math.max(state.currentStep - 1, 1) as 1 | 2 | 3,
     })),
-  setUploadedFile: (file, preview) =>
-    set({ uploadedFile: file, uploadedPreview: preview }),
-  clearUploadedFile: () =>
-    set({ uploadedFile: null, uploadedPreview: null, imageUrl: null }),
+  setUploadedImages: (images) =>
+    set({
+      uploadedImages: images.slice(0, MAX_UPLOADED_IMAGES),
+    }),
+  addUploadedImages: (images) =>
+    set((state) => ({
+      uploadedImages: [...state.uploadedImages, ...images].slice(
+        0,
+        MAX_UPLOADED_IMAGES,
+      ),
+    })),
+  removeUploadedImage: (index) =>
+    set((state) => ({
+      uploadedImages: state.uploadedImages.filter((_, i) => i !== index),
+    })),
+  clearUploadedImages: () => set({ uploadedImages: [], imageUrl: null }),
   setImageUrl: (url) => set({ imageUrl: url }),
   setAudienceDensity: (density) => set({ audienceDensity: density }),
-  setPersona: (persona) => set({ persona }),
+  setEventType: (eventType) => set({ eventType }),
+  setAudienceMood: (mood) => set({ audienceMood: mood }),
+  setCustomContext: (context) => set({ customContext: context }),
   reset: () =>
     set({
       currentStep: 1,
-      uploadedFile: null,
-      uploadedPreview: null,
+      uploadedImages: [],
       imageUrl: null,
       audienceDensity: 80,
-      persona: "presenter",
+      eventType: "presentation",
+      audienceMood: "auto",
+      customContext: "",
     }),
 }));

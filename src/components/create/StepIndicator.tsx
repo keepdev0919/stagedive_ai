@@ -1,15 +1,18 @@
 "use client";
 
 import { useCreateStore } from "@/stores/useCreateStore";
+import { useLocale } from "@/lib/i18n/useLocale";
+import { type TranslationKey } from "@/lib/i18n/translations";
 
 const STEPS = [
-  { icon: "image", label: "Background" },
-  { icon: "groups", label: "Crowd" },
-  { icon: "person", label: "Persona" },
+  { icon: "image", label: "create.stepper.title.background" as TranslationKey },
+  { icon: "groups", label: "create.stepper.title.audience" as TranslationKey },
+  { icon: "event", label: "create.stepper.title.persona" as TranslationKey },
 ];
 
 export default function StepIndicator() {
   const { currentStep, setStep } = useCreateStore();
+  const { t } = useLocale();
 
   return (
     <div className="flex items-center mb-12 relative">
@@ -53,7 +56,7 @@ export default function StepIndicator() {
                     : "text-slate-500"
               }`}
             >
-              {step.label}
+              {t(step.label)}
             </span>
           </div>
         );

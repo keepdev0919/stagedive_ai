@@ -8,6 +8,22 @@ export type StageCategory =
 
 export type AudienceDensity = 40 | 80 | 120;
 
+export type EventType =
+  | "presentation"
+  | "performance"
+  | "lecture"
+  | "interview"
+  | "event"
+  | "other";
+
+export type AudienceMood =
+  | "auto"
+  | "calm_attention"
+  | "warm_support"
+  | "formal_event"
+  | "high_energy";
+
+// Keep Persona for backward compatibility with existing records
 export type Persona = "presenter" | "musician";
 
 export type StageStatus = "draft" | "generating" | "ready" | "failed";
@@ -31,10 +47,14 @@ export interface Stage {
   capacity: string;
   feature: string;
   source_image_url: string | null;
+  source_image_urls?: string[] | null;
   generated_image_url: string | null;
   video_url: string | null;
   audience_density: AudienceDensity;
-  persona: Persona;
+  event_type: EventType;
+  audience_mood: AudienceMood;
+  custom_context?: string | null;
+  persona?: Persona;
   status: StageStatus;
   isPreset: false;
   created_at: string;

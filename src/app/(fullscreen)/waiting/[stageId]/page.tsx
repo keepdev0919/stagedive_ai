@@ -4,11 +4,13 @@ import { useRouter, useParams } from "next/navigation";
 import { useCallback } from "react";
 import BreathingGuide from "@/components/waiting/BreathingGuide";
 import ProgressIndicator from "@/components/waiting/ProgressIndicator";
+import { useLocale } from "@/lib/i18n/useLocale";
 
 export default function WaitingPage() {
   const router = useRouter();
   const params = useParams();
   const stageId = params.stageId as string;
+  const { t } = useLocale();
 
   const handleComplete = useCallback(() => {
     router.push(`/practice/${stageId}`);
@@ -36,8 +38,7 @@ export default function WaitingPage() {
 
       {/* Tip */}
       <p className="text-xs text-slate-500 max-w-sm text-center">
-        Take this moment to center yourself. Focus on your breathing and
-        visualize a successful performance.
+        {t("waiting.tip")}
       </p>
     </div>
   );

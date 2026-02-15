@@ -1,21 +1,27 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useLocale } from "@/lib/i18n/useLocale";
+import { type TranslationKey } from "@/lib/i18n/translations";
 
 interface ProgressIndicatorProps {
   onComplete: () => void;
 }
 
-const STAGES = [
-  { label: "Analyzing your environment...", duration: 2000 },
-  { label: "Generating audience view...", duration: 3000 },
-  { label: "Creating video simulation...", duration: 3000 },
-  { label: "Finalizing your stage...", duration: 2000 },
+const STAGES: Array<{
+  labelKey: Extract<TranslationKey, `progress.${string}`>;
+  duration: number;
+}> = [
+  { labelKey: "progress.analyzing", duration: 2000 },
+  { labelKey: "progress.generateAudience", duration: 3000 },
+  { labelKey: "progress.createVideo", duration: 3000 },
+  { labelKey: "progress.finalizing", duration: 2000 },
 ];
 
 export default function ProgressIndicator({
   onComplete,
 }: ProgressIndicatorProps) {
+  const { t } = useLocale();
   const [currentStage, setCurrentStage] = useState(0);
   const [progress, setProgress] = useState(0);
 
@@ -54,7 +60,7 @@ export default function ProgressIndicator({
           progress_activity
         </span>
         <p className="text-sm text-slate-300 font-medium">
-          {STAGES[currentStage]?.label}
+          {t(STAGES[currentStage]?.labelKey ?? "progress.analyzing")}
         </p>
       </div>
 

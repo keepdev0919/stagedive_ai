@@ -1,8 +1,10 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
+import { useLocale } from "@/lib/i18n/useLocale";
 
 export default function LoginPage() {
+  const { t } = useLocale();
   const handleGoogleLogin = async () => {
     const supabase = createClient();
     await supabase.auth.signInWithOAuth({
@@ -28,16 +30,18 @@ export default function LoginPage() {
           Stage-Dive
         </h1>
         <p className="text-slate-400 mt-2">
-          Virtual Practice Platform
+          {t("auth.brandTagline")}
         </p>
       </div>
 
       {/* Login Card */}
       <div className="glass rounded-2xl p-8 space-y-6">
         <div className="text-center">
-          <h2 className="text-xl font-bold text-white mb-2">Welcome Back</h2>
+          <h2 className="text-xl font-bold text-white mb-2">
+            {t("auth.welcomeTitle")}
+          </h2>
           <p className="text-sm text-slate-400">
-            Sign in to access your stages and practice sessions
+            {t("auth.welcomeDescription")}
           </p>
         </div>
 
@@ -63,11 +67,11 @@ export default function LoginPage() {
               fill="#EA4335"
             />
           </svg>
-          Continue with Google
+          {t("auth.continueWithGoogle")}
         </button>
 
         <div className="text-center text-xs text-slate-500">
-          By continuing, you agree to our Terms of Service
+          {t("auth.terms")}
         </div>
       </div>
     </div>

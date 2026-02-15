@@ -1,22 +1,55 @@
 import { NextResponse } from "next/server";
 import { generateAudienceImage } from "@/lib/ai/image-generator";
+import { createClient } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
   try {
-    const { stageId, sourceImageUrl, audienceDensity, persona } =
-      await request.json();
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-    if (!stageId || !sourceImageUrl) {
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const {
+      stageId,
+      sourceImageUrl,
+      sourceImageUrls,
+      audienceDensity,
+      eventType,
+      audienceMood,
+      persona,
+      customContext,
+    } = body;
+
+    const normalizedImageUrls = Array.isArray(sourceImageUrls)
+      ? sourceImageUrls.filter(
+          (url: unknown) => typeof url === "string" && Boolean(url),
+        )
+      : [];
+    const resolvedImageUrl =
+      sourceImageUrl ||
+      normalizedImageUrls[0] ||
+      undefined;
+
+    if (!stageId || !resolvedImageUrl) {
       return NextResponse.json(
-        { error: "stageId and sourceImageUrl are required" },
+        { error: "stageId and source image URL(s) are required" },
         { status: 400 },
       );
     }
 
     const result = await generateAudienceImage({
-      sourceImageUrl,
+      sourceImageUrl: resolvedImageUrl,
+      sourceImageUrls: normalizedImageUrls,
       audienceDensity: audienceDensity || 80,
-      persona: persona || "presenter",
+      eventType: eventType || body.event_type || persona || "presentation",
+      audienceMood:
+        audienceMood || body.audience_mood || "auto",
+      customContext: customContext || body.custom_context || undefined,
     });
 
     return NextResponse.json({

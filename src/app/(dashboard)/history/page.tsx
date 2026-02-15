@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useLocale } from "@/lib/i18n/useLocale";
 
 interface SessionRecord {
   id: string;
@@ -15,6 +16,7 @@ export default function HistoryPage() {
   const [sessions, setSessions] = useState<SessionRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const { t } = useLocale();
 
   useEffect(() => {
     const loadSessions = async () => {
@@ -33,7 +35,7 @@ export default function HistoryPage() {
         setError("");
       } catch (error) {
         console.error("History load error:", error);
-        setError("Unable to load practice history.");
+        setError(t("history.loadError"));
         setSessions([]);
       } finally {
         setIsLoading(false);
@@ -41,11 +43,11 @@ export default function HistoryPage() {
     };
 
     void loadSessions();
-  }, []);
+  }, [t]);
 
   if (isLoading) {
     return (
-      <div className="text-sm text-slate-400">Loading history...</div>
+      <div className="text-sm text-slate-400">{t("history.loading")}</div>
     );
   }
 
@@ -53,11 +55,9 @@ export default function HistoryPage() {
     <>
       <div className="mb-8">
         <h2 className="text-3xl font-bold tracking-tight mb-2 text-white">
-          Practice History
+          {t("history.title")}
         </h2>
-        <p className="text-slate-400">
-          Track your progress and review past sessions.
-        </p>
+        <p className="text-slate-400">{t("history.subtitle")}</p>
       </div>
 
       {error ? (
@@ -71,10 +71,11 @@ export default function HistoryPage() {
           <span className="material-symbols-outlined text-6xl text-slate-600 mb-4">
             history
           </span>
-          <h3 className="text-xl font-bold text-white mb-2">No sessions yet</h3>
+          <h3 className="text-xl font-bold text-white mb-2">
+            {t("history.emptyTitle")}
+          </h3>
           <p className="text-slate-400 text-sm max-w-sm mx-auto">
-            Start practicing with a stage to see your history here. Every session
-            builds confidence.
+            {t("history.emptyDescription")}
           </p>
         </div>
       ) : (
@@ -92,7 +93,7 @@ export default function HistoryPage() {
                 </div>
                 <div>
                   <p className="text-sm font-bold text-white">
-                    {session.stages?.name || "Unknown Stage"}
+                    {session.stages?.name || t("history.unknownStage")}
                   </p>
                   <p className="text-xs text-slate-400">
                     {new Date(session.ended_at).toLocaleString()}
@@ -104,7 +105,9 @@ export default function HistoryPage() {
                   {Math.floor(session.duration_seconds / 60)}:
                   {String(session.duration_seconds % 60).padStart(2, "0")}
                 </p>
-                <p className="text-xs text-slate-400">Duration</p>
+                <p className="text-xs text-slate-400">
+                  {t("history.durationLabel")}
+                </p>
               </div>
             </div>
           ))}

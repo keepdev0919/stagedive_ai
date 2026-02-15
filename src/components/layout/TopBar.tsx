@@ -1,8 +1,20 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { useLocale } from "@/lib/i18n/useLocale";
 
 export default function TopBar() {
+  const { t } = useLocale();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/login");
+  };
+
   return (
     <header className="h-20 flex items-center justify-between px-8 border-b border-white/5">
       {/* Search */}
@@ -12,7 +24,7 @@ export default function TopBar() {
         </span>
         <input
           type="text"
-          placeholder="Search venues, locations or styles..."
+          placeholder={t("topbar.searchPlaceholder")}
           className="w-full bg-slate-panel border-none rounded-lg py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
         />
       </div>
@@ -26,6 +38,13 @@ export default function TopBar() {
         <button className="w-10 h-10 rounded-lg bg-slate-panel flex items-center justify-center text-slate-500 hover:text-primary transition-colors border border-white/5">
           <span className="material-symbols-outlined">settings</span>
         </button>
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="w-10 h-10 rounded-lg bg-slate-panel flex items-center justify-center text-slate-500 hover:text-primary transition-colors border border-white/5"
+        >
+          <span className="material-symbols-outlined">logout</span>
+        </button>
         <div className="h-8 w-px bg-white/10 mx-2" />
         <Link
           href="/create"
@@ -34,7 +53,7 @@ export default function TopBar() {
           <span className="material-symbols-outlined text-base">
             rocket_launch
           </span>
-          QUICK START
+          {t("topbar.quickStart")}
         </Link>
       </div>
     </header>

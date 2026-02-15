@@ -12,16 +12,13 @@ export async function GET(
       data: { user },
     } = await supabase.auth.getUser();
 
+    const query = supabase.from("stages").select("*").eq("id", id);
+
     if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      query.eq("status", "ready").not("video_url", "is", null);
     }
 
-    const { data: stage, error } = await supabase
-      .from("stages")
-      .select("*")
-      .eq("id", id)
-      .eq("user_id", user.id)
-      .single();
+    const { data: stage, error } = await query.single();
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 404 });

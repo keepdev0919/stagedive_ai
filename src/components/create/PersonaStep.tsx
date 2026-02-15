@@ -1,107 +1,171 @@
 "use client";
 
 import { useCreateStore } from "@/stores/useCreateStore";
-import { Persona } from "@/types/stage";
+import { AudienceMood, EventType } from "@/types/stage";
+import { useLocale } from "@/lib/i18n/useLocale";
+import { type TranslationKey } from "@/lib/i18n/translations";
 
-const PERSONAS: {
-  value: Persona;
+const EVENT_TYPES: {
+  value: EventType;
   icon: string;
-  title: string;
-  description: string;
-  uiStyle: string;
+  label: TranslationKey;
+  description: TranslationKey;
 }[] = [
   {
-    value: "presenter",
-    icon: "record_voice_over",
-    title: "Presenter",
-    description:
-      "Optimized for speaking, presentations, and screen-sharing interactions.",
-    uiStyle: "Slate",
+    value: "presentation",
+    icon: "mic",
+    label: "create.eventType.presentation.title",
+    description: "create.eventType.presentation.description",
   },
   {
-    value: "musician",
+    value: "performance",
     icon: "music_note",
-    title: "Musician",
-    description:
-      "Optimized for high-fidelity audio, stage lighting, and performance visualizers.",
-    uiStyle: "Neon",
+    label: "create.eventType.performance.title",
+    description: "create.eventType.performance.description",
+  },
+  {
+    value: "lecture",
+    icon: "school",
+    label: "create.eventType.lecture.title",
+    description: "create.eventType.lecture.description",
+  },
+  {
+    value: "interview",
+    icon: "chat",
+    label: "create.eventType.interview.title",
+    description: "create.eventType.interview.description",
+  },
+  {
+    value: "event",
+    icon: "celebration",
+    label: "create.eventType.event.title",
+    description: "create.eventType.event.description",
+  },
+  {
+    value: "other",
+    icon: "tune",
+    label: "create.eventType.other.title",
+    description: "create.eventType.other.description",
+  },
+];
+
+const AUDIENCE_MOODS: {
+  value: AudienceMood;
+  label: TranslationKey;
+}[] = [
+  {
+    value: "auto",
+    label: "create.audienceMood.auto",
+  },
+  {
+    value: "calm_attention",
+    label: "create.audienceMood.calm_attention",
+  },
+  {
+    value: "warm_support",
+    label: "create.audienceMood.warm_support",
+  },
+  {
+    value: "formal_event",
+    label: "create.audienceMood.formal_event",
+  },
+  {
+    value: "high_energy",
+    label: "create.audienceMood.high_energy",
   },
 ];
 
 export default function PersonaStep() {
-  const { persona, setPersona } = useCreateStore();
+  const {
+    eventType,
+    audienceMood,
+    customContext,
+    setEventType,
+    setAudienceMood,
+    setCustomContext,
+  } = useCreateStore();
+  const { t } = useLocale();
+
+  const isCustomEventType = eventType === "other";
 
   return (
-    <section className="glass rounded-xl p-8 space-y-6">
+    <section className="glass rounded-xl p-8 space-y-8">
       <div className="flex items-center gap-3">
         <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/20 text-primary font-bold text-sm">
           03
         </span>
-        <h3 className="text-xl font-bold text-white">Persona Selection</h3>
+        <h3 className="text-xl font-bold text-white">
+          {t("create.persona.title")}
+        </h3>
       </div>
-      <div className="grid md:grid-cols-2 gap-6">
-        {PERSONAS.map((p) => {
-          const isSelected = persona === p.value;
-          return (
-            <div
-              key={p.value}
-              onClick={() => setPersona(p.value)}
-              className="relative group cursor-pointer"
-            >
-              {/* Glow effect */}
-              <div
-                className={`absolute -inset-0.5 bg-gradient-to-r from-primary to-blue-600 rounded-xl transition-all blur-sm ${
-                  isSelected ? "opacity-20" : "opacity-0 group-hover:opacity-10"
-                }`}
-              />
 
-              {/* Card */}
-              <div
-                className={`relative bg-slate-900 rounded-xl p-6 transition-all ${
-                  isSelected
-                    ? "border-2 border-primary shadow-glow"
-                    : "border border-white/5 hover:border-primary/50"
-                }`}
-              >
-                <div
-                  className={`w-12 h-12 rounded-lg flex items-center justify-center mb-4 ${
-                    isSelected
-                      ? "bg-primary/10 text-primary"
-                      : "bg-slate-800 text-primary"
-                  }`}
-                >
-                  <span className="material-symbols-outlined text-3xl">
-                    {p.icon}
-                  </span>
-                </div>
-                <h4 className="text-lg font-bold text-white mb-2">
-                  {p.title}
-                </h4>
-                <p className="text-slate-400 text-sm leading-relaxed">
-                  {p.description}
-                </p>
-                <div className="mt-6 flex items-center justify-between">
-                  <span
-                    className={`text-[10px] font-bold uppercase tracking-widest ${
-                      isSelected ? "text-primary" : "text-slate-500"
-                    }`}
-                  >
-                    Active UI: {p.uiStyle}
-                  </span>
-                  <span
-                    className={`material-symbols-outlined text-primary transition-opacity ${
-                      isSelected
-                        ? "opacity-100"
-                        : "opacity-0 group-hover:opacity-50"
-                    }`}
-                  >
-                    check_circle
-                  </span>
-                </div>
+      <div className="space-y-4">
+        <h4 className="text-sm font-bold text-slate-200">
+          {t("create.persona.title")}
+        </h4>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {EVENT_TYPES.map((type) => (
+            <button
+              key={type.value}
+              type="button"
+              onClick={() => {
+                setEventType(type.value);
+                if (type.value !== "other") setCustomContext("");
+              }}
+              className={`relative rounded-lg border p-4 text-left transition-all ${
+                eventType === type.value
+                  ? "border-primary bg-primary/10 shadow-glow"
+                  : "border-white/10 bg-slate-900 hover:border-primary/50"
+              }`}
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <span className="material-symbols-outlined text-primary">
+                  {type.icon}
+                </span>
+                <p className="font-bold text-white text-sm">{t(type.label)}</p>
               </div>
-            </div>
-          );
-        })}
+              <p className="text-xs text-slate-400 leading-relaxed">
+                {t(type.description)}
+              </p>
+            </button>
+          ))}
+        </div>
+        {isCustomEventType && (
+          <div className="space-y-2 pt-4">
+            <label className="text-sm font-bold text-slate-200 block">
+              {t("create.customContext.label")}
+            </label>
+            <textarea
+              value={customContext}
+              onChange={(event) => setCustomContext(event.target.value)}
+              placeholder={t("create.customContext.placeholder")}
+              maxLength={500}
+              className="w-full min-h-[96px] rounded-lg border border-white/15 bg-slate-950/60 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/60"
+            />
+          </div>
+        )}
+      </div>
+
+      <div className="space-y-4">
+        <h4 className="text-sm font-bold text-slate-200">
+          {t("create.audienceMood.sectionTitle")}
+        </h4>
+        <div className="flex flex-wrap gap-2">
+          {AUDIENCE_MOODS.map((mood) => (
+            <button
+              key={mood.value}
+              type="button"
+              onClick={() => setAudienceMood(mood.value)}
+              className={`rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wide transition-all ${
+                audienceMood === mood.value
+                  ? "bg-primary text-white"
+                  : "bg-white/5 text-slate-300 hover:text-white hover:bg-white/10"
+              }`}
+            >
+              {t(mood.label)}
+            </button>
+          ))}
+        </div>
       </div>
     </section>
   );

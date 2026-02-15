@@ -1,14 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useLocale } from "@/lib/i18n/useLocale";
+import { type TranslationKey } from "@/lib/i18n/translations";
 
-const PHASES = [
-  { label: "Breathe In...", duration: 4000 },
-  { label: "Hold...", duration: 7000 },
-  { label: "Breathe Out...", duration: 8000 },
+const PHASES: Array<{
+  labelKey: Extract<TranslationKey, `breathing.${string}`>;
+  duration: number;
+}> = [
+  { labelKey: "breathing.phase.in", duration: 4000 },
+  { labelKey: "breathing.phase.hold", duration: 7000 },
+  { labelKey: "breathing.phase.out", duration: 8000 },
 ];
 
 export default function BreathingGuide() {
+  const { t } = useLocale();
   const [phaseIndex, setPhaseIndex] = useState(0);
   const currentPhase = PHASES[phaseIndex];
 
@@ -53,9 +59,9 @@ export default function BreathingGuide() {
 
       {/* Phase Label */}
       <p className="text-2xl font-bold text-white tracking-wide animate-pulse">
-        {currentPhase.label}
+        {t(currentPhase.labelKey)}
       </p>
-      <p className="text-sm text-slate-400">4-7-8 Breathing Technique</p>
+      <p className="text-sm text-slate-400">{t("breathing.technique")}</p>
     </div>
   );
 }

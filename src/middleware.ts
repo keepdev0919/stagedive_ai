@@ -37,12 +37,28 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const pathname = request.nextUrl.pathname;
+
+  const publicRoutes = ["/", "/login", "/callback"];
+  const authRequiredPrefixes = [
+    "/create",
+    "/history",
+    "/profile",
+    "/practice",
+    "/waiting",
+    "/complete",
+  ];
+
+  const isPublicRoute = publicRoutes.some(
+    (route) =>
+      pathname === route ||
+      (route !== "/" && pathname.startsWith(`${route}/`)),
+  );
+
   // Protected routes: redirect to login if not authenticated
   const isProtectedRoute =
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/callback") &&
-    !request.nextUrl.pathname.startsWith("/api") &&
-    !request.nextUrl.pathname.startsWith("/_next");
+    !isPublicRoute &&
+    authRequiredPrefixes.some((route) => pathname.startsWith(`${route}/`) || pathname === route);
 
   if (!user && isProtectedRoute) {
     const url = request.nextUrl.clone();

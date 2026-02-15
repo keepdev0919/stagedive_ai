@@ -5,11 +5,13 @@ import { useParams, useRouter } from "next/navigation";
 import VideoPlayer from "@/components/practice/VideoPlayer";
 import SessionTimer from "@/components/practice/SessionTimer";
 import { PRESET_STAGES } from "@/data/presets";
+import { useLocale } from "@/lib/i18n/useLocale";
 
 type CustomStage = {
   id: string;
   name: string | null;
   source_image_url: string | null;
+  source_image_urls?: string[] | null;
   generated_image_url: string | null;
   video_url: string | null;
 };
@@ -18,10 +20,11 @@ export default function PracticePage() {
   const router = useRouter();
   const params = useParams();
   const stageId = params.stageId as string;
+  const { t } = useLocale();
 
   const [startTime] = useState(() => new Date());
   const [showControls, setShowControls] = useState(true);
-  const [stageName, setStageName] = useState("Practice Session");
+  const [stageName, setStageName] = useState(t("practice.defaultStageName"));
   const [imageUrl, setImageUrl] = useState("");
   const [videoUrl, setVideoUrl] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
@@ -48,16 +51,19 @@ export default function PracticePage() {
 
         const { stage }: { stage: CustomStage } = await response.json();
         if (!cancelled && stage) {
-          setStageName(stage.name || "Practice Session");
-          setImageUrl(
-            stage.generated_image_url || stage.source_image_url || "",
-          );
+          setStageName(stage.name || t("practice.defaultStageName"));
           setVideoUrl(stage.video_url || undefined);
+          setImageUrl(
+            stage.generated_image_url ||
+              stage.source_image_urls?.[0] ||
+              stage.source_image_url ||
+              "",
+          );
         }
       } catch (error) {
         if (!cancelled) {
           console.error(error);
-          setStageName("Practice Session");
+          setStageName(t("practice.defaultStageName"));
           setImageUrl(PRESET_STAGES[0]?.imageUrl || "");
           setVideoUrl(undefined);
         }
@@ -73,7 +79,7 @@ export default function PracticePage() {
     return () => {
       cancelled = true;
     };
-  }, [stageId]);
+  }, [stageId, t]);
 
   const handleEndSession = useCallback(() => {
     const durationSeconds = Math.floor(
@@ -89,7 +95,7 @@ export default function PracticePage() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-white text-sm">Loading stage...</p>
+        <p className="text-white text-sm">{t("practice.loading")}</p>
       </div>
     );
   }
@@ -99,10 +105,10 @@ export default function PracticePage() {
       <div className="min-h-screen flex items-center justify-center text-center p-8">
         <div>
           <h2 className="text-white text-xl font-bold mb-2">
-            Stage unavailable
+            {t("practice.unavailableTitle")}
           </h2>
           <p className="text-slate-400 text-sm">
-            Could not load stage media for this practice session.
+            {t("practice.unavailableDescription")}
           </p>
         </div>
       </div>
@@ -138,7 +144,7 @@ export default function PracticePage() {
             <span className="material-symbols-outlined text-lg">
               arrow_back
             </span>
-            Exit
+            {t("practice.controls.exit")}
           </button>
 
           <SessionTimer startTime={startTime} />
@@ -150,7 +156,7 @@ export default function PracticePage() {
             {stageName}
           </h2>
           <p className="text-slate-300 mt-2 text-sm">
-            Click anywhere to toggle controls
+            {t("practice.controls.toggleHint")}
           </p>
         </div>
 
@@ -164,7 +170,7 @@ export default function PracticePage() {
             className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-bold text-sm flex items-center gap-2 transition-all active:scale-95 shadow-lg"
           >
             <span className="material-symbols-outlined text-lg">stop</span>
-            End Session
+            {t("practice.controls.endSession")}
           </button>
         </div>
       </div>
